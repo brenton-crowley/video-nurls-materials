@@ -32,9 +32,122 @@
 
 import SwiftUI
 
-func fetchDomains() async throws -> [Domain] {
-  let url = URL(string: "https://api.raywenderlich.com/api/domains")!
-  let (data, _) = try await URLSession.shared.data(from: url)
-  
-  return try JSONDecoder().decode(Domains.self, from: data).data
+//func fetchDomains() async throws -> [Domain] {
+//  let url = URL(string: "https://api.raywenderlich.com/api/domains")!
+//  let (data, _) = try await URLSession.shared.data(from: url)
+//
+//  return try JSONDecoder().decode(Domains.self, from: data).data
+//}
+//
+//func findTitle(url: URL) async throws -> String? {
+//
+//    for try await line in url.lines {
+//        if line.contains("<title>") {
+//            return line.trimmingCharacters(in: .whitespaces)
+//        }
+//    }
+//    return nil
+//}
+//
+//Task {
+//    if let title = try await findTitle(url: URL(string: "https://www.raywenderlich.com")!) {
+//        print(title)
+//    }
+//}
+//
+//extension Domains {
+//    static var domains: [Domain] {
+//        get async throws {
+//            try await fetchDomains()
+//        }
+//    }
+//}
+//
+//Task {
+//
+//    dump(try await Domains.domains)
+//
+//}
+//
+//extension Domains {
+//    enum Error: Swift.Error { case outOfRange }
+//
+//    static subscript(_ index: Int) -> String {
+//
+//        get async throws {
+//            let domains = try await Self.domains
+//
+//            guard domains.indices.contains(index) else { throw Domains.Error.outOfRange }
+//
+//            return domains[index].attributes.name
+//        }
+//    }
+//}
+//
+//
+//Task {
+//    dump(try await Domains[4])
+//}
+
+//let favouritesPlaylist = Playlist(
+//    title: "Favourite Songs",
+//    author: "Brent",
+//    songs: ["The Real Thing"]
+//)
+//
+//let partyPlaylist = Playlist(
+//    title: "Party Songs",
+//    author: "Prince",
+//    songs: ["1999"]
+//)
+//
+//Task {
+//
+//    await favouritesPlaylist.move(song: "1999", from: partyPlaylist)
+//    await favouritesPlaylist.move(song: "The Real Thing", to: partyPlaylist)
+//
+//    await print(favouritesPlaylist.songs)
+//    await print(partyPlaylist.songs)
+//
+//}
+
+let url = URL(string: "https://api.raywenderlich.com/api/domains")!
+let session = URLSession.shared.dataTask(with: url, completionHandler: { data, _, _ in
+    guard let data = data,
+          let domain = try? JSONDecoder().decode(Domains.self, from: data).data.first
+    else {
+        print("Request Failed")
+        return
+    }
+    
+    Task { @MainActor in
+            print(domain)
+            print(Thread.isMainThread)
+    }
+})
+
+session.resume()
+
+extension Domains {
+    
+    @MainActor func domainNames() -> [String] {
+        print("Getting domain names in the main thread? \(Thread.isMainThread)")
+        
+        return data.map { $0.attributes.name }
+    }
 }
+
+let session2 = URLSession.shared.dataTask(with: url) { data, _, _ in
+    guard let data = data,
+            let domains = try? JSONDecoder().decode(Domains.self, from: data)
+    else {
+        print("Request Failed")
+        return
+    }
+    
+    Task {
+        await print(domains.domainNames())
+    }
+}
+
+session2.resume()
