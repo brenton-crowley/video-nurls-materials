@@ -36,8 +36,10 @@ import SwiftUI
 func printTitle(url: URL) async throws {
   for try await line in url.lines {
     if line.contains("<title>") {
-      print("Found the title. Are we on the main thread? \(Thread.isMainThread)")
-      print(line)
+        await MainActor.run {
+            print("Found the title. Are we on the main thread? \(Thread.isMainThread)")
+            print(line)
+        }
       
       return
     }

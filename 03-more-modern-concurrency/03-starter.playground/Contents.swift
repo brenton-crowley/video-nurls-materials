@@ -122,7 +122,6 @@ let session = URLSession.shared.dataTask(with: url, completionHandler: { data, _
     
     Task { @MainActor in
             print(domain)
-            print(Thread.isMainThread)
     }
 })
 
