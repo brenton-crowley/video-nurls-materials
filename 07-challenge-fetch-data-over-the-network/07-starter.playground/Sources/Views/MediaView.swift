@@ -31,6 +31,7 @@
 /// THE SOFTWARE.
 
 import SwiftUI
+import Foundation
 
 // MARK: Media View
 public struct MediaView: View {
@@ -79,13 +80,32 @@ public struct MediaView: View {
     guard let url =  URL(string:"https://itunes.apple.com/search?media=music&entity=song&term=starlight") else {
       throw MediaError.urlCreationFailed
     }
-
-    // TODO: Challenge - Download and decode your data here!
-
-    //        guard let response = try? JSONDecoder().decode(MediaResponse.self, from: data) else {
-    //            return
-    //        }
+      
+      let config = URLSessionConfiguration.default
+      let session = URLSession(configuration: config)
+      
+      Task {
+          let (data, response) = try await session.data(from: url)
+          
+          // TODO: Challenge - Download and decode your data here!
+          
+          guard let httpResponse = response as? HTTPURLResponse,
+                (200..<300).contains(httpResponse.statusCode) else { throw MediaError.requestFailed }
+          
+          guard let mediaResponse = try? JSONDecoder().decode(MediaResponse.self, from: data) else { throw MediaError.responseDecodingFailed }
+          
+          await MainActor.run {
+              self.musicItems = mediaResponse.results
+          }
+      }
   }
 }
 
+
+
+struct Previews_MediaView_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}
 
