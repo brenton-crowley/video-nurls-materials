@@ -15,6 +15,7 @@
 		55F69FCB27BF44110080353B /* MediaResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F69FCA27BF44110080353B /* MediaResponse.swift */; };
 		55F69FCD27BF44280080353B /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F69FCC27BF44280080353B /* AudioPlayer.swift */; };
 		55F69FCF27BF443E0080353B /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F69FCE27BF443E0080353B /* SongDetailView.swift */; };
+		CF550DD32AB173DD001C4B66 /* SongDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF550DD22AB173DD001C4B66 /* SongDownloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		55F69FCA27BF44110080353B /* MediaResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaResponse.swift; sourceTree = "<group>"; };
 		55F69FCC27BF44280080353B /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		55F69FCE27BF443E0080353B /* SongDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailView.swift; sourceTree = "<group>"; };
+		CF550DD22AB173DD001C4B66 /* SongDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDownloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				55F69FCA27BF44110080353B /* MediaResponse.swift */,
+				CF550DD22AB173DD001C4B66 /* SongDownloader.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 				18D775C522AD944300AE281E /* ContentView.swift in Sources */,
 				55F69FCF27BF443E0080353B /* SongDetailView.swift in Sources */,
 				1839F4B025190F2A00BB00F1 /* AppMain.swift in Sources */,
+				CF550DD32AB173DD001C4B66 /* SongDownloader.swift in Sources */,
 				55F69FCB27BF44110080353B /* MediaResponse.swift in Sources */,
 				55F69FCD27BF44280080353B /* AudioPlayer.swift in Sources */,
 			);

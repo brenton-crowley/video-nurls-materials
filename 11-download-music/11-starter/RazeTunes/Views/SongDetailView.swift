@@ -37,6 +37,10 @@ struct SongDetailView: View {
   // MARK: Properties
   @Binding var musicItem: MusicItem
   @MainActor @State private var playMusic = false
+  @MainActor @State private var isDownloading = false
+  @ObservedObject private var downloader = SongDownloader()
+  
+  
   // MARK: Body
   var body: some View {
     VStack {
@@ -52,16 +56,50 @@ struct SongDetailView: View {
           Text(musicItem.collectionName)
           Spacer()
           Button(action: {
-            print("Download tapped.")
+            Task {
+              await downloadTapped()
+            }
           }, label: {
-            Text("Download")
+            if isDownloading {
+              Text("Downloading...")
+            } else {
+              Text(downloader.downloadLocation == nil ? "Download" : "Listen")
+            }
           })
+          .disabled(isDownloading)
+          
+          if isDownloading {
+            ProgressView()
+          }
+          
           Spacer()
         }
       }
     }
     .padding()
+    .sheet(isPresented: $playMusic) {
+      AudioPlayer(songUrl: downloader.downloadLocation!)
+    }
   }
+  private func downloadTapped() async {
+    
+    if downloader.downloadLocation == nil {
+      isDownloading = true
+      
+      // execute before the method returns
+      defer {
+        isDownloading = false
+      }
+      
+      guard let previewURL = musicItem.previewURL else { return }
+      await downloader.downloadSong(at: previewURL)
+    } else {
+      playMusic = true
+    }
+    
+    
+  }
+  
 }
 
 // MARK: - Preview Provider
