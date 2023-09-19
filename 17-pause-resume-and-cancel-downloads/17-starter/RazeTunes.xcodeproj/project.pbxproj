@@ -16,6 +16,7 @@
 		55F69FCB27BF44110080353B /* MediaResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F69FCA27BF44110080353B /* MediaResponse.swift */; };
 		55F69FCD27BF44280080353B /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F69FCC27BF44280080353B /* AudioPlayer.swift */; };
 		55F69FCF27BF443E0080353B /* SongDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F69FCE27BF443E0080353B /* SongDetailView.swift */; };
+		CFD0DA302AB82D0F001942B3 /* MutableSongDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD0DA2F2AB82D0F001942B3 /* MutableSongDownloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		55F69FCA27BF44110080353B /* MediaResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaResponse.swift; sourceTree = "<group>"; };
 		55F69FCC27BF44280080353B /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		55F69FCE27BF443E0080353B /* SongDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongDetailView.swift; sourceTree = "<group>"; };
+		CFD0DA2F2AB82D0F001942B3 /* MutableSongDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableSongDownloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 			children = (
 				55F69FCA27BF44110080353B /* MediaResponse.swift */,
 				55A792FA27BF46BD004B8731 /* SongDownloader.swift */,
+				CFD0DA2F2AB82D0F001942B3 /* MutableSongDownloader.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFD0DA302AB82D0F001942B3 /* MutableSongDownloader.swift in Sources */,
 				18D775C522AD944300AE281E /* ContentView.swift in Sources */,
 				55F69FCF27BF443E0080353B /* SongDetailView.swift in Sources */,
 				1839F4B025190F2A00BB00F1 /* AppMain.swift in Sources */,

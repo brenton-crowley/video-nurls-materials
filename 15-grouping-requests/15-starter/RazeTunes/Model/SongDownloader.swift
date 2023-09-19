@@ -154,4 +154,63 @@ class SongDownloader: ObservableObject {
       downloadLocation = destinationURL
     }
   }
+  
+  func download(songAt songURL: URL, artworkAt artworkURL: URL) async throws -> Data {
+    
+    typealias Download = (_ url: URL, _ response: URLResponse)
+    
+    async let song: Download = try session.download(from: songURL)
+    async let artwork: Download = try session.download(from: artworkURL)
+    
+    let (songDownload, artworkDownload) = try await (song, artwork)
+    
+    guard let songHTTPResponse = songDownload.response as? HTTPURLResponse,
+          let artworkHTTPResponse = artworkDownload.response as? HTTPURLResponse,
+          songHTTPResponse.statusCode == 200,
+          artworkHTTPResponse.statusCode == 200 else {
+      throw SongDownloadError.invalidResponse
+    }
+    
+    // File Manager
+    let fileManager = FileManager.default
+
+    // Get documents directory
+    guard let documentsPath = fileManager.urls(
+      for: .documentDirectory,
+      in: .userDomainMask).first
+    else {
+      throw SongDownloadError.documentDirectoryError
+    }
+    
+    let lastPathComponent = songURL.lastPathComponent
+    let destinationURL = documentsPath.appendingPathComponent(lastPathComponent)
+    
+    do {
+      if fileManager.fileExists(atPath: destinationURL.path) {
+        try fileManager.removeItem(at: destinationURL)
+      }
+      
+      try await fileManager.copyItem(at: song.url, to: destinationURL)
+      
+      await MainActor.run {
+        downloadLocation = destinationURL
+      }
+      
+      do {
+        
+        return try Data(contentsOf: artworkURL)
+        
+      } catch let error {
+        print(error)
+        throw ArtworkDownloadError.failedToDownloadArtwork
+      }
+      
+    } catch let error {
+      print(error)
+      throw SongDownloadError.failedToStoreSong
+    }
+    
+  }
+  
+  
 }

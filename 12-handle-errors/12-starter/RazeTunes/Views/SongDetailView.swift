@@ -39,8 +39,11 @@ struct SongDetailView: View {
 
   @ObservedObject private var downloader = SongDownloader()
 
-  @MainActor @State private var isDownloading = false
-  @MainActor @State private var playMusic = false
+  @State private var isDownloading = false
+  @State private var playMusic = false
+  @State private var showDownloadFailedAlert = false
+  
+  @State private var errorMessage = ""
 
   // MARK: Body
   var body: some View {
@@ -71,6 +74,12 @@ struct SongDetailView: View {
                 Text("Downloading...")
               } else {
                 Text(downloader.downloadLocation == nil ? "Download" : "Listen")
+              }
+            })
+            .alert(errorMessage, isPresented: $showDownloadFailedAlert, actions: {
+              Button("Dismiss", role: .cancel) {
+                showDownloadFailedAlert = false
+                errorMessage = ""
               }
             })
             .disabled(isDownloading)
@@ -104,7 +113,14 @@ struct SongDetailView: View {
         return
       }
 
-      await downloader.downloadSong(at: previewURL)
+      do {
+        try await downloader.downloadSong(at: previewURL)
+        
+      } catch let error {
+        print(error)
+        showDownloadFailedAlert = true
+        errorMessage = error.localizedDescription
+      }
     } else {
       playMusic = true
     }

@@ -41,6 +41,7 @@ struct SongDetailView: View {
 
   // swiftlint:disable:next force_unwrapping
   @MainActor @State private var artworkImage = UIImage(named: "URLSessionArtwork")!
+  @MainActor @State private var downloadProgress: Float = 0.4
   @MainActor @State private var isDownloading = false
   @MainActor @State private var playMusic = false
   @MainActor @State private var showDownloadFailedAlert = false
@@ -85,7 +86,7 @@ struct SongDetailView: View {
             .disabled(isDownloading)
 
             if isDownloading {
-              ProgressView()
+              ProgressView(value: downloadProgress)
             }
           }
 
@@ -137,7 +138,8 @@ struct SongDetailView: View {
       }
 
       do {
-        try await downloader.downloadSong(at: previewURL)
+//        try await downloader.downloadSong(at: previewURL)
+        try await downloader.downloadSongBytes(at: previewURL, progress: $downloadProgress)
       } catch {
         print(error)
 

@@ -69,7 +69,7 @@ struct SongDetailView: View {
           VStack(spacing: 16) {
             Button(action: {
               Task {
-                await downloadTapped()
+                await downloadSongTapped()
               }
             }, label: {
               if isDownloading {
@@ -95,11 +95,11 @@ struct SongDetailView: View {
       }
     }
     .padding()
-    .onAppear(perform: {
-      Task {
-        await downloadArtwork()
-      }
-    })
+//    .onAppear(perform: {
+//      Task {
+//        await downloadArtwork()
+//      }
+//    })
     .sheet(isPresented: $playMusic) {
       // swiftlint:disable:next force_unwrapping
       AudioPlayer(songUrl: downloader.downloadLocation!)
@@ -125,6 +125,36 @@ struct SongDetailView: View {
     }
   }
 
+  private func downloadSongTapped() async {
+    if downloader.downloadLocation == nil {
+      
+      guard let artworkURL = URL(string: musicItem.artwork),
+            let previewURL = musicItem.previewURL
+      else { return }
+      
+      isDownloading = true
+      
+      defer {
+        isDownloading = false
+      }
+      
+      do {
+        let data = try await downloader.download(songAt: previewURL, artworkAt: artworkURL)
+        
+        guard let image = UIImage(data: data) else { return }
+        
+        artworkImage = image
+        
+      } catch let error {
+        print(error)
+        showDownloadFailedAlert = true
+      }
+      
+    } else {
+      playMusic = true
+    }
+  }
+  
   private func downloadTapped() async {
     if downloader.downloadLocation == nil {
       isDownloading = true
